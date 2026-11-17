@@ -9,14 +9,14 @@ public class EmployeeManager {
     public static String readEmployeeData() throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
-                        new FileInputStream("employees.txt")));
+                        new FileInputStream(Constants.FILE_NAME)));
         return reader.readLine();
     }
 
     // Helper method to write employee data to file
     public static void writeEmployeeData(String data, boolean append) throws IOException {
         BufferedWriter writer = new BufferedWriter(
-                new FileWriter("employees.txt", append));
+                new FileWriter(Constants.FILE_NAME, append));
         writer.write(data);
         writer.close();
     }
