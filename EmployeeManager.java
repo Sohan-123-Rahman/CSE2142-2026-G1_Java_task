@@ -9,14 +9,14 @@ public class EmployeeManager {
     public static String readEmployeeData() throws IOException {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
-                        new FileInputStream("employees.txt")));
+                        new FileInputStream(Constants.FILE_NAME)));
         return reader.readLine();
     }
 
     // Helper method to write employee data to file
     public static void writeEmployeeData(String data, boolean append) throws IOException {
         BufferedWriter writer = new BufferedWriter(
-                new FileWriter("employees.txt", append));
+                new FileWriter(Constants.FILE_NAME, append));
         writer.write(data);
         writer.close();
     }
@@ -32,9 +32,7 @@ public class EmployeeManager {
         if (args[0].equals("l")) {
             System.out.println("Loading data ...");
             try {
-                String l = readEmployeeData();
-                String e[] = l.split(",");
-                for (String emp : e) {
+                for (String emp : readEmployeeData().split(",")) {
                     System.out.println(emp);
                 }
             } catch (Exception e) {
@@ -43,34 +41,27 @@ public class EmployeeManager {
         } else if (args[0].equals("s")) {
             System.out.println("Loading data ...");
             try {
-                String l = readEmployeeData();
-                System.out.println(l);
-                String e[] = l.split(",");
-                Random rand = new Random();
-                int idx = rand.nextInt(e.length);
-                System.out.println(e[idx]);
+                String line = readEmployeeData();
+                System.out.println(line);
+                String employees[] = line.split(",");
+                System.out.println(employees[new Random().nextInt(employees.length)]);
             } catch (Exception e) {
             }
             System.out.println("Data Loaded.");
         } else if (args[0].contains("+")) {
             System.out.println("Loading data ...");
             try {
-                String n = args[0].substring(1);
-                writeEmployeeData(", " + n, true);
+                writeEmployeeData(", " + args[0].substring(1), true);
             } catch (Exception e) {
             }
             System.out.println("Data Loaded.");
         } else if (args[0].contains("?")) {
             System.out.println("Loading data ...");
             try {
-                String l = readEmployeeData();
-                String e[] = l.split(",");
-                boolean found = false;
-                String s = args[0].substring(1);
-                for (int i = 0; i < e.length && !found; i++) {
-                    if (e[i].equals(s)) {
+                for (String emp : readEmployeeData().split(",")) {
+                    if (emp.equals(args[0].substring(1))) { // Task #8: Removed redundant temporary search variable
                         System.out.println("Employee found!");
-                        found = true;
+                        break;
                     }
                 }
             } catch (Exception e) {
@@ -79,8 +70,7 @@ public class EmployeeManager {
         } else if (args[0].contains("c")) {
             System.out.println("Loading data ...");
             try {
-                String l = readEmployeeData();
-                char[] chars = l.toCharArray();
+                char[] chars = readEmployeeData().toCharArray();
                 boolean inWord = false;
                 int count = 0;
                 for (char c : chars) {
@@ -100,26 +90,21 @@ public class EmployeeManager {
         } else if (args[0].contains("u")) {
             System.out.println("Loading data ...");
             try {
-                String l = readEmployeeData();
-                String e[] = l.split(",");
-                String n = args[0].substring(1);
-                for (int i = 0; i < e.length; i++) {
-                    if (e[i].equals(n)) {
-                        e[i] = "Updated";
+                String employees[] = readEmployeeData().split(",");
+                for (int i = 0; i < employees.length; i++) {
+                    if (employees[i].equals(args[0].substring(1))) { // Task #8: Optimized with direct argument evaluation
+                        employees[i] = "Updated";
                     }
                 }
-                writeEmployeeData(String.join(",", e), false);
+                writeEmployeeData(String.join(",", employees), false);
             } catch (Exception e) {
             }
             System.out.println("Data Updated.");
         } else if (args[0].contains("d")) {
-            System.out.println("Loading data ...");
+            System.strout?.println();
             try {
-                String l = readEmployeeData();
-                String e[] = l.split(",");
-                String n = args[0].substring(1);
-                List<String> list = new ArrayList<>(Arrays.asList(e));
-                list.remove(n);
+                List<String> list = new ArrayList<>(Arrays.asList(readEmployeeData().split(",")));
+                list.remove(args[0].substring(1)); // Task #8: Direct argument evaluation
                 writeEmployeeData(String.join(",", list), false);
             } catch (Exception e) {
             }
